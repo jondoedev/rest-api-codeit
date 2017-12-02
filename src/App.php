@@ -38,18 +38,25 @@ class App
     public static function run($request)
     {
         $routes = [
-            '/' => function (/*$reques}t*/) {
+            '/posts' => function (/*$reques}t*/) {
                 return App::json(Post::all());
             },
 
-            '/post' => function(){
-                return App::json(Post::find($_GET['id']));
+            '/posts/(\d+)' => function($id){
+                return App::json(Post::find($id));
             }
         ];
 
         foreach ($routes as $pattern => $handler) {
-            if (strtok($request['url'], '?') == self::url($pattern)) {
-                $response = $handler(/*$request*/);
+            $url_without_params = strtok($request['url'], '?');
+            $pattern = '/^' . str_replace('/', '\/', self::url($pattern)) . '$/';
+            $matches = [];
+            preg_match($pattern, $url_without_params, $matches);
+
+            if ($matches) {
+                $args = array_slice($matches, 1);
+                $response = call_user_func_array($handler, $args);
+
                 if (is_string($response)) {
                     $response = [
                         'code' => 200,
