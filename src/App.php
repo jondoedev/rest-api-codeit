@@ -43,7 +43,7 @@ class App
             preg_match($pattern, $url_without_params, $matches);
 
             if ($matches) {
-                $args = array_slice($matches, 1);
+                $args = array_merge([$request], array_slice($matches, 1));
                 $response = call_user_func_array($handler, $args);
 
                 if (is_string($response)) {

@@ -10,7 +10,9 @@ App\App::init();
 $request = [
     'url' => $_SERVER['REQUEST_URI'],
     'info' => $_SERVER,
-    'params' => $_REQUEST
+    'params' => $_REQUEST,
+    'body' => file_get_contents('php://input'),
+    'json' => json_decode(file_get_contents('php://input'), true)
 ];
 $response = App\App::run($request);
 
