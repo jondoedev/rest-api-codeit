@@ -2,11 +2,8 @@
 
 namespace App;
 
-use App\Models\Post;
-use App\Models\User;
 use ArrayAccess;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Rakit\Validation\Validator;
 
 class App
 {
@@ -37,15 +34,7 @@ class App
 
     public static function run($request)
     {
-        $routes = [
-            '/posts' => function (/*$reques}t*/) {
-                return App::json(Post::all());
-            },
-
-            '/posts/(\d+)' => function($id){
-                return App::json(Post::find($id));
-            }
-        ];
+        $routes = require_once __DIR__.'/routes.php';
 
         foreach ($routes as $pattern => $handler) {
             $url_without_params = strtok($request['url'], '?');
