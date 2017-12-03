@@ -4,6 +4,13 @@ use App\App;
 use App\Models\Post;
 
 return [
+
+	'/' => function($request){
+		return "Main Page<br>
+		'/posts - to see all posts'<br>
+		'/post/{postID} - to get post by ID'";
+	},
+
     '/posts' => function ($request) {
         return App::json(Post::all());
     },
