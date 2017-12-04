@@ -71,4 +71,11 @@ class App
             'body' => json_encode($data)
         ];
     }
+    public static function render($path)
+    {
+        ob_start();
+        require_once __DIR__ . "/../templates/$path.php";
+        $output = ob_get_clean();
+        return $output;
+    }
 }
