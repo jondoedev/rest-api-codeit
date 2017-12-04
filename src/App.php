@@ -56,7 +56,6 @@ class App
                 return $response;
             }
         }
-
         return [
             'code' => 404,
             'headers' => [],
@@ -70,5 +69,13 @@ class App
             'headers' => ['Content-Type' => 'application/json'],
             'body' => json_encode($data)
         ];
+    }
+
+    public static function render($path)
+    {
+        ob_start();
+        require_once __DIR__ . "/../templates/$path.php";
+        $output = ob_get_clean();
+        return $output;
     }
 }
