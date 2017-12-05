@@ -11,7 +11,6 @@ return [
 
     '/posts' => function ($request) {
         return App::json(Post::all());
-//        return App::render('main');
     },
 
     '/posts/(\d+)' => function($request, $id){
@@ -41,5 +40,8 @@ return [
         $result = Post::destroy($request['json']);
         $msg = 'Item Was Deleted Successfully';
         return $result.$msg;
+    },
+
+    '/posts/edit' => function($request){
     }
 ];
