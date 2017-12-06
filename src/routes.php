@@ -36,22 +36,7 @@ return [
             return App::json($post);
         }
     ],
-    
-    //TODO: Create an a form to fill DB columns
-    [
-        'method' => 'POST',
-        'pattern' => '/posts/new',
-        'handler' => function(){
-            $data = [
-                "title"=>$_GET['title'],
-                "content"=>$_GET['content'],
-                "author"=>$_GET['author']
-            ];
-            $post = Post::create($data);
-            return App::json($post);
-        }
-    ],
-    
+
     [
         'method' => 'DELETE',
         'pattern' => "/posts/delete/(\d+)",
@@ -76,6 +61,9 @@ return [
             }
             if(isset($request_data['author'])){
                 $post->author = $request_data['author'];
+            }
+            if(isset($request_data['created_at'])){
+                $post->created_at = $request_data['created_at'];
             }
             $post->save();
             return App::json($post);

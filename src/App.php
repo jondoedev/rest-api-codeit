@@ -70,7 +70,7 @@ class App
 
         return [
             'code' => 404,
-            'body' => 'not found'
+            'body' => App::render('404')
         ];
     }
 
