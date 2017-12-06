@@ -4,6 +4,7 @@ namespace App;
 
 use ArrayAccess;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class App
 {
@@ -36,30 +37,39 @@ class App
     {
         $routes = require_once __DIR__.'/routes.php';
 
-        foreach ($routes as $pattern => $handler) {
+        foreach ($routes as $route) {
+            $pattern = $route['pattern'];
+            $handler = $route['handler'];
+            $method = $route['method'];
+
             $url_without_params = strtok($request['url'], '?');
             $pattern = '/^' . str_replace('/', '\/', self::url($pattern)) . '$/';
             $matches = [];
             preg_match($pattern, $url_without_params, $matches);
 
-            if ($matches) {
+            if ($matches && ($request['method'] == $method)) {
                 $args = array_merge([$request], array_slice($matches, 1));
-                $response = call_user_func_array($handler, $args);
-
-                if (is_string($response)) {
-                    $response = [
-                        'code' => 200,
-                        'headers' => [],
-                        'body' => $response
+                try {
+                    $response = call_user_func_array($handler, $args);
+    
+                    if (is_string($response)) {
+                        $response = [
+                            'code' => 200,
+                            'body' => $response
+                        ];
+                    }
+                    return $response;
+                } catch (ModelNotFoundException $e) {
+                    return [
+                        'code' => 404, 
+                        'body' => 'not found'
                     ];
                 }
-                return $response;
             }
         }
 
         return [
             'code' => 404,
-            'headers' => [],
             'body' => 'not found'
         ];
     }

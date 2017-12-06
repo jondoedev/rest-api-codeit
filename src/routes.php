@@ -4,44 +4,61 @@ use App\App;
 use App\Models\Post;
 
 return [
-
-    '/' => function($request){
-        return App::render('main');
-    },
-
-    '/posts' => function ($request) {
-        return App::json(Post::all());
-    },
-
-    '/posts/(\d+)' => function($request, $id){
-        return App::json(Post::find($id));
-    },
-
-    // TODO: URL it in rest way
-    '/posts/create' => function($request){
-        $post = Post::create($request['json']);
-        return App::json($post);
-    },
+    [
+        'method' => 'GET',
+        'pattern' => '/',
+        'handler' => function($request){
+            return App::render('main');
+        }
+    ],
+    
+    [
+        'method' => 'GET',
+        'pattern' => '/posts',
+        'handler' => function ($request) {
+            return App::json(Post::all());
+        }
+    ],
+    
+    [
+        'method' => 'GET',
+        'pattern' => '/posts/(\d+)',
+        'handler' => function($request, $id){
+            return App::json(Post::findOrFail($id));
+        }
+    ],
+    
+    [
+        'method' => 'POST',
+        'pattern' => '/posts/create',
+        'handler' => function($request){
+            $post = Post::create($request['json']);
+            return App::json($post);
+        }
+    ],
+    
     //TODO: Create an a form to fill DB columns
-    '/posts/new' => function(){
-
-        $data = [
-            "title"=>$_GET['title'],
-            "content"=>$_GET['content'],
-            "author"=>$_GET['author']
-        ];
-        $post = Post::create($data);
-        return App::json($post);
-    },
-
-    "/posts/delete" => function($request){
-        $id = $request['json'];
-        Post::find($id);
-        $result = Post::destroy($request['json']);
-        $msg = 'Item Was Deleted Successfully';
-        return $result.$msg;
-    },
-
-    '/posts/edit' => function($request){
-    }
+    [
+        'method' => 'POST',
+        'pattern' => '/posts/new',
+        'handler' => function(){
+            $data = [
+                "title"=>$_GET['title'],
+                "content"=>$_GET['content'],
+                "author"=>$_GET['author']
+            ];
+            $post = Post::create($data);
+            return App::json($post);
+        }
+    ],
+    
+    [
+        'method' => 'DELETE',
+        'pattern' => "/posts/delete/(\d+)",
+        'handler' => function($request, $id){
+            $post = Post::findOrFail($id);
+            $post->delete();
+            return "Item #{$id} Was Deleted Successfully";
+        }
+    ]
 ];

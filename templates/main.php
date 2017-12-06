@@ -1,11 +1,21 @@
+<?php require_once __DIR__ . '/_header.php';
+use App\App;
+use App\Models\Post;
+?>
+
+
 <div>
-    <h3>You are on main page</h3>
-<?php $root_path = 'http://192.168.1.199/dmitry.kalenyuk/rest-api-codeit/public' ?>
-    <ul>
-        <li>Click<a href="<?php echo $root_path?>/posts"> here </a> to get all posts</li>
-        <li>Click<a href="<?php echo $root_path?>/posts/1"> here </a> to get post by ID
-            | Change id in the adress string</li>
+<?php
+//TODO Make a cycle that will increase ID by 1
 
+$post = Post::find(1);
+echo '<h3>'.$post->title.'</h3><br>'.
+    $post->content.'<br>'.
+    '<h4>'.$post->author.'</h4>';
 
-    </ul>
+?>
 </div>
+
+
+
+<?php //require_once __DIR__ . '/_footer.php'; ?>
