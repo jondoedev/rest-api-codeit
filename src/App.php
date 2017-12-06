@@ -5,6 +5,7 @@ namespace App;
 use ArrayAccess;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Rakit\Validation\Validator;
 
 class App
 {
@@ -87,5 +88,27 @@ class App
         require_once __DIR__ . "/../templates/$path.php";
         $output = ob_get_clean();
         return $output;
+    }
+    public static function Validator($request, $rules){
+        $request = $request['json'];
+        $validator = new Validator;
+        $validation = $validator->validate($request,$rules);
+
+        if ($validation->fails()) {
+            // handling errors
+            $errors = $validation->errors();
+            echo "<pre>";
+            print_r($errors->firstOfAll());
+            echo "</pre>";
+            exit;
+        } else {
+            // validation passes
+            echo "Success!";
+        }
+
+
+
+
+
     }
 }

@@ -2,6 +2,7 @@
 
 use App\App;
 use App\Models\Post;
+use Rakit\Validation\Validator as Validator;
 
 return [
     [
@@ -27,11 +28,17 @@ return [
             return App::json(Post::findOrFail($id));
         }
     ],
-    
+        //TODO: Fix  'content' => 'required|min:10|' in rules, min:10 doesn't work
     [
         'method' => 'POST',
         'pattern' => '/posts/create',
         'handler' => function($request){
+            $rules = [
+                'id' => 'numeric',
+                'title' => 'required|',
+                'content' => 'required|min:2|',
+                'author' => 'required'];
+            App::Validator($request, $rules);
             $post = Post::create($request['json']);
             return App::json($post);
         }
@@ -51,6 +58,14 @@ return [
         'method' => 'PUT',
         'pattern' => '/posts/edit/(\d+)',
         'handler' => function ($request, $id){
+
+            $rules = [
+                //validation rules
+                'title' => 'required|string',
+                'content' => 'required|min:10|string',
+                'auhtor' => 'required|string',
+            ];
+
             $request_data = $request['json'];
             $post = Post::find($id);
             if(isset($request_data['title'])){

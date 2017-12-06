@@ -1,7 +1,8 @@
 {
   "require": {
     "illuminate/database": "4.2.*",
-    "rakit/validation": "^0.13.1"
+    "rakit/validation": "^0.13.1",
+    "zircote/swagger-php": "^2.0"
 
   },
   "autoload": {
