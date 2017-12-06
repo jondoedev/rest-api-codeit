@@ -60,5 +60,25 @@ return [
             $post->delete();
             return "Item #{$id} Was Deleted Successfully";
         }
+    ],
+        //TODO: Try to make this code more flexible and convenient for reuse
+    [
+        'method' => 'PUT',
+        'pattern' => '/posts/edit/(\d+)',
+        'handler' => function ($request, $id){
+            $request_data = $request['json'];
+            $post = Post::find($id);
+            if(isset($request_data['title'])){
+                $post->title = $request_data['title'];
+            }
+            if (isset($request_data['content'])){
+                $post->content = $request_data['content'];
+            }
+            if(isset($request_data['author'])){
+                $post->author = $request_data['author'];
+            }
+            $post->save();
+            return App::json($post);
+        }
     ]
 ];
