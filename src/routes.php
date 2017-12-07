@@ -61,10 +61,11 @@ return [
 
             $rules = [
                 //validation rules
-                'title' => 'required|string',
-                'content' => 'required|min:10|string',
-                'auhtor' => 'required|string',
+                'title' => 'min:2',
+                'content' => 'min:10',
+                'author' => 'min:2'
             ];
+            App::Validator($request,$rules);
 
             $request_data = $request['json'];
             $post = Post::find($id);
