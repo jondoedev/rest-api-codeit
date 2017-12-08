@@ -113,21 +113,32 @@ class App
     }
 
     //TODO: Try to fix "Notice: Undefined index: PHP_AUTH_USER and PHP_AUTH_PW"
+    //TODO: Replase credentials settings to config.php
+    //Improving Authentification by header
     public static function headerAuth()
     {
+        //setting login credentials
         $credentials = [
             'login' => 'root',
             'pwd' => 'root'
         ];
-
-        if ($_SERVER['PHP_AUTH_USER'] !== $credentials['login'] && $_SERVER['PHP_AUTH_PW'] !== $credentials['pwd']) {
-            header('HTTP/1.1 401 Unauthorized');
+        /*
+         * Checking login credentials
+        */
+        if ($_SERVER['PHP_AUTH_USER'] !== $credentials['login'] or $_SERVER['PHP_AUTH_PW'] !== $credentials['pwd']) {
+            header('HTTP/1.1  Unauthorized');
             header('WWW-Authenticate: Basic realm= "PHP REST API"');
-            exit  ('Invalid Login Credentials');}
+            http_response_code(401);
+            unset($credentials);
+            exit  ('Invalid Login Credentials');
+        }
 
         }
 
-//    }
+    public static function tokenCreate(){
+        $token = md5(uniqid(mt_rand(),true));
+        return $token;
+    }
 
 
 
