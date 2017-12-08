@@ -31,7 +31,7 @@ class App
             ] + self::$config['db']);
         $capsule->setAsGlobal();
         $capsule->bootEloquent();
-        date_default_timezone_set('UTC');
+        date_default_timezone_set(self::$config['timezone']);
     }
 
     public static function url($relative_url)
