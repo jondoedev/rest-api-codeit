@@ -5,6 +5,7 @@ use App\Models\Post;
 use Rakit\Validation\Validator as Validator;
 
 return [
+
     [
         'method' => 'GET',
         'pattern' => '/',
@@ -12,7 +13,10 @@ return [
             return App::render('main');
         }
     ],
-    
+    /**
+     * domain/posts/
+     * This route allows us to get all existing posts
+     */
     [
         'method' => 'GET',
         'pattern' => '/posts',
@@ -20,7 +24,9 @@ return [
             return App::json(Post::all());
         }
     ],
-    
+    /**
+     * domain/posts/ID - where ID = Post ID that you want to get
+     */
     [
         'method' => 'GET',
         'pattern' => '/posts/(\d+)',
@@ -28,7 +34,12 @@ return [
             return App::json(Post::findOrFail($id));
         }
     ],
-        //TODO: Fix  'content' => 'required|min:10|' in rules, min:10 doesn't work
+
+    /**
+     * domain/posts/create
+     * on this route you cann create new post
+     * --Post data sending in a request body
+     */
     [
         'method' => 'POST',
         'pattern' => '/posts/create',
@@ -44,6 +55,10 @@ return [
         }
     ],
 
+    /**
+     * domain/posts/delete/ID - where ID = Post ID you want to delete
+     *
+     */
     [
         'method' => 'DELETE',
         'pattern' => "/posts/delete/(\d+)",
@@ -54,6 +69,15 @@ return [
         }
     ],
         //TODO: Try to make this code more flexible and convenient for reuse
+    /**
+     * domain/posts/edit/ID - where ID = Post Id you want to edit
+     * Post data sending in a request body as:
+     * {
+     *  "key":"value",
+     *  "key":"value"
+     * }
+     *
+     */
     [
         'method' => 'PUT',
         'pattern' => '/posts/edit/(\d+)',
