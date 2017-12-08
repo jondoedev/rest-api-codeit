@@ -12,6 +12,10 @@ class App
 {
     public static $config;
 
+    /**
+     * Initing the application:
+     * Connectiong to desired DB (configure it up 'config.php')
+     */
     public static function init()
     {
 //        session_start();
@@ -76,6 +80,13 @@ class App
         ];
     }
 
+    /**
+     * @param ArrayAccess $data
+     * @return array
+     * This method allows us to work with noArray objects as with Arrays using ArrayAccess
+     * It will setting response code and HTTP header.
+     * Will return data in json encoding
+     */
     public static function json(ArrayAccess $data)
     {
         return [
@@ -85,14 +96,21 @@ class App
         ];
     }
 
+    /**
+     * Improving convenient views rendering
+     */
     public static function render($path)
     {
-//        ob_start();
+        ob_start();
         require_once __DIR__ . "/../templates/$path.php";
         $output = ob_get_clean();
         return $output;
     }
 
+    /**
+     * Improving validation of data, that will be transfered in request body
+     * to avoid the presence of empty columns in DB
+     */
     public static function Validator($request, $rules)
     {
 
@@ -102,8 +120,8 @@ class App
         if ($validation->fails()) {
             // handling errors
             $errors = $validation->errors->firstOfAll();
-            foreach ($errors as $error){
-                echo '<pre>'.$error.'</pre>';
+            foreach ($errors as $error) {
+                echo '<pre>' . $error . '</pre>';
             }
             exit;
         } else {
@@ -114,7 +132,9 @@ class App
 
     //TODO: Try to fix "Notice: Undefined index: PHP_AUTH_USER and PHP_AUTH_PW"
     //TODO: Replase credentials settings to config.php
-    //Improving Authentification by header
+    /**
+     * Improving Authentification by header
+     */
     public static function headerAuth()
     {
         //setting login credentials
@@ -122,7 +142,8 @@ class App
             'login' => 'root',
             'pwd' => 'root'
         ];
-        /*
+
+        /**
          * Checking login credentials
         */
         if ($_SERVER['PHP_AUTH_USER'] !== $credentials['login'] or $_SERVER['PHP_AUTH_PW'] !== $credentials['pwd']) {
