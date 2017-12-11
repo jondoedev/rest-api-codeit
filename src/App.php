@@ -1,5 +1,14 @@
 <?php
+/**
+ * @SWG\Info(title="CodeIT RESTful API", version="0.1")
+ */
 
+/**
+ * @SWG\Get(
+ *     path="/api/resource.json",
+ *     @SWG\Response(response="200", description="An example resource")
+ * )
+ */
 namespace App;
 
 use App\Models\User;
@@ -131,7 +140,6 @@ class App
     }
 
     //TODO: Try to fix "Notice: Undefined index: PHP_AUTH_USER and PHP_AUTH_PW"
-    //TODO: Replase credentials settings to config.php
     /**
      * Improving Authentification by header
      */
@@ -155,12 +163,5 @@ class App
         }
 
         }
-
-    public static function tokenCreate(){
-        $token = md5(uniqid(mt_rand(),true));
-        return $token;
-    }
-
-
 
 }
