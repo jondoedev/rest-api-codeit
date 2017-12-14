@@ -1,0 +1,221 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "RESTful API on PHP",
+        "contact": {
+            "email": "dmitrykalenyuk@gmail.com"
+        },
+        "version": "1.0"
+    },
+    "host": "dcodeit.net",
+    "basePath": "/dmitry.kalenyuk/rest-api-codeit/public",
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "description": "Return main page, where you can see routing info",
+                "operationId": "mainPage",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "If user authorized"
+                    },
+                    "401": {
+                        "description": "When user not authorized"
+                    },
+                    "404": {
+                        "description": "If Error"
+                    }
+                }
+            }
+        },
+        "/posts": {
+            "get": {
+                "description": "Returns all existing posts",
+                "operationId": "getAll",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "If user authorized"
+                    },
+                    "401": {
+                        "description": "When user not authorized"
+                    },
+                    "404": {
+                        "description": "If Error"
+                    }
+                }
+            }
+        },
+        "/posts/{id}": {
+            "get": {
+                "description": "Return a post by ID, if user authorized",
+                "operationId": "getAction",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of post to get",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "If post fetched successfully"
+                    },
+                    "401": {
+                        "description": "When user not authorized"
+                    },
+                    "404": {
+                        "description": "If post ID doesn't exists"
+                    }
+                }
+            }
+        },
+        "/posts/create": {
+            "post": {
+                "summary": "Create new Post",
+                "description": "Create new post use send post data",
+                "operationId": "postAction",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "formData",
+                        "description": "Title for new post",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "content",
+                        "in": "formData",
+                        "description": "Content for new post",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "author",
+                        "in": "formData",
+                        "description": "Author of new post",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "If new post created successfully"
+                    },
+                    "401": {
+                        "description": "If user not authenticated"
+                    },
+                    "400": {
+                        "description": "If post data is empty"
+                    }
+                }
+            }
+        },
+        "/posts/delete/{id}": {
+            "delete": {
+                "description": "Delete a post by ID, if user authorized",
+                "operationId": "deleteAction",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the post, you want to get",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "If post was deleted successfully"
+                    },
+                    "401": {
+                        "description": "When user not authorized"
+                    },
+                    "404": {
+                        "description": "If Error"
+                    }
+                }
+            }
+        },
+        "/posts/edit/{id}": {
+            "put": {
+                "summary": "Edit an existing post",
+                "description": "Create new post use send post data",
+                "operationId": "editAction",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "PostID required",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "title",
+                        "in": "formData",
+                        "description": "Title for new post",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "content",
+                        "in": "formData",
+                        "description": "Content for new post",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "author",
+                        "in": "formData",
+                        "description": "Author of new post",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "If new post created successfully"
+                    },
+                    "401": {
+                        "description": "If user not authenticated"
+                    },
+                    "404": {
+                        "description": "If post data is empty"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {},
+    "externalDocs": {
+        "description": "Find more information",
+        "url": "https://swagger.io/about"
+    }
+}

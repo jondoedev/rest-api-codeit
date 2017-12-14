@@ -5,7 +5,36 @@ use App\Models\Post;
 use Rakit\Validation\Validator as Validator;
 
 return [
-
+    /**
+     * @SWG\Get(
+     *     path="/",
+     *     description="Return main page, where you can see routing info",
+     *     operationId="mainPage",
+     *     produces={
+     *          "application/json",
+     *     },
+     *
+     *
+     *     @SWG\Response(
+     *          response=200,
+     *          description="If user authorized"
+     *     ),
+     *     @SWG\Response(
+     *          response=401,
+     *          description="When user not authorized"
+     *     ),
+     *     @SWG\Response(
+     *          response=404,
+     *          description="If Error"
+     *     ),
+     *
+     *          )
+     *     )
+     * )
+     *
+     *
+     * @return 'main.php'
+     */
     [
         'method' => 'GET',
         'pattern' => '/',
@@ -13,10 +42,38 @@ return [
             return App::render('main');
         }
     ],
+
     /**
-     * domain/posts/
-     * This route allows us to get all existing posts
+     * @SWG\Get(
+     *     path="/posts",
+     *     description="Returns all existing posts",
+     *     operationId="getAll",
+     *     produces={
+     *          "application/json"
+     *     },
+     *
+     *
+     *     @SWG\Response(
+     *          response=200,
+     *          description="If user authorized"
+     *     ),
+     *     @SWG\Response(
+     *          response=401,
+     *          description="When user not authorized"
+     *     ),
+     *     @SWG\Response(
+     *          response=404,
+     *          description="If Error"
+     *
+     *
+     *          )
+     *     )
+     * )
+     *
+     *
+     *
      */
+
     [
         'method' => 'GET',
         'pattern' => '/posts',
@@ -24,6 +81,43 @@ return [
             return App::json(Post::all());
         }
     ],
+
+    /**
+     * @SWG\Get(
+     *     path="/posts/{id}",
+     *     description="Return a post by ID, if user authorized",
+     *     operationId="getAction",
+     *     produces={
+     *          "application/json"
+     *     },
+     *
+     *     @SWG\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="ID of post to get",
+     *          required=true,
+     *          type="integer"
+     *     ),
+     *
+     *     @SWG\Response(
+     *          response=200,
+     *          description="If post fetched successfully"
+     *     ),
+     *     @SWG\Response(
+     *          response=401,
+     *          description="When user not authorized"
+     *     ),
+     *     @SWG\Response(
+     *          response=404,
+     *          description="If post ID doesn't exists"
+     *
+     *          )
+     *     )
+     * ))
+     *
+     * @param int $id
+     * @return int
+     */
     /**
      * domain/posts/ID - where ID = Post ID that you want to get
      */
@@ -36,9 +130,52 @@ return [
     ],
 
     /**
-     * domain/posts/create
-     * on this route you cann create new post
-     * --Post data sending in a request body
+     * Create new Post
+     *
+     * @SWG\POST(
+     *     path="/posts/create",
+     *     description="Create new post use send post data",
+     *     operationId="postAction",
+     *     produces={
+     *          "application/json"
+     *     },
+     *     @SWG\Parameter(
+     *          name="title",
+     *          in="formData",
+     *          description="Title for new post",
+     *          required=true,
+     *          type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *          name="content",
+     *          in="formData",
+     *          description="Content for new post",
+     *          required=true,
+     *          type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *          name="author",
+     *          in="formData",
+     *          description="Author of new post",
+     *          required=true,
+     *          type="string"
+     *      ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="If new post created successfully"
+     *     ),
+     *     @SWG\Response(
+     *          response=401,
+     *          description="If user not authenticated"
+     *     ),
+     *     @SWG\Response(
+     *          response=400,
+     *          description="If post data is empty"
+     *     ),
+     *
+     * )
+     *
+     * @return array
      */
     [
         'method' => 'POST',
@@ -56,9 +193,42 @@ return [
     ],
 
     /**
-     * domain/posts/delete/ID - where ID = Post ID you want to delete
+     * @SWG\DELETE(
+     *     path="/posts/delete/{id}",
+     *     description="Delete a post by ID, if user authorized",
+     *     operationId="deleteAction",
+     *     produces={
+     *          "application/json",
+     *     },
+     *     @SWG\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="ID of the post, you want to get",
+     *          required=true,
+     *          type="integer",
+     *     ),
      *
+     *     @SWG\Response(
+     *          response=200,
+     *          description="If post was deleted successfully"
+     *     ),
+     *     @SWG\Response(
+     *          response=401,
+     *          description="When user not authorized"
+     *     ),
+     *     @SWG\Response(
+     *          response=404,
+     *          description="If Error"
+     *
+     *
+     *          )
+     *     )
+     * )
+     *
+     * @param int $id
+     * @return int
      */
+
     [
         'method' => 'DELETE',
         'pattern' => "/posts/delete/(\d+)",
@@ -68,16 +238,64 @@ return [
             return "Item #{$id} Was Deleted Successfully";
         }
     ],
-        //TODO: Try to make this code more flexible and convenient for reuse
+
+
     /**
-     * domain/posts/edit/ID - where ID = Post Id you want to edit
-     * Post data sending in a request body as:
-     * {
-     *  "key":"value",
-     *  "key":"value"
-     * }
+     * Edit an existing post
      *
+     * @SWG\PUT(
+     *     path="/posts/edit/{id}",
+     *     description="Create new post use send post data",
+     *     operationId="editAction",
+     *     produces={
+     *          "application/json"
+     *     },
+     *     @SWG\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="PostID required",
+     *          required=true,
+     *          type="integer"
+     *     ),
+     *     @SWG\Parameter(
+     *          name="title",
+     *          in="formData",
+     *          description="Title for new post",
+     *          required=false,
+     *          type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *          name="content",
+     *          in="formData",
+     *          description="Content for new post",
+     *          required=false,
+     *          type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *          name="author",
+     *          in="formData",
+     *          description="Author of new post",
+     *          required=false,
+     *          type="string"
+     *     ),
+     *     @SWG\Response(
+     *          response=200,
+     *          description="If new post created successfully"
+     *     ),
+     *     @SWG\Response(
+     *          response=401,
+     *          description="If user not authenticated"
+     *     ),
+     *     @SWG\Response(
+     *          response=404,
+     *          description="If post data is empty"
+     *     ),
+     *
+     * )
+     *
+     * @return array
      */
+
     [
         'method' => 'PUT',
         'pattern' => '/posts/edit/(\d+)',

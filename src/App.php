@@ -1,14 +1,34 @@
 <?php
 /**
- * @SWG\Info(title="CodeIT RESTful API", version="0.1")
- */
-
-/**
- * @SWG\Get(
- *     path="/api/resource.json",
- *     @SWG\Response(response="200", description="An example resource")
+ * @SWG\Swagger(
+ *      @SWG\Info(
+ *          version="1.0",
+ *          title="RESTful API on PHP",
+ *          @SWG\Contact(
+ *              email="dmitrykalenyuk@gmail.com"
+ *          )
+ *      ),
+ *      host="dcodeit.net",
+ *      basePath="/dmitry.kalenyuk/rest-api-codeit/public",
+ *      schemes={"http"},
+ *      produces={"application/json"},
+ *      consumes={"application/json"},
+ *      @SWG\ExternalDocumentation(
+ *          description="Find more information",
+ *          url="https://swagger.io/about"
+ *      ),
+ *
+ *          @SWG\Property(
+ *              property="message",
+ *              type="string"
+ *          )
+ *      )
+ *          }
+ *     )
  * )
  */
+
+
 namespace App;
 
 use App\Models\User;
@@ -21,10 +41,7 @@ class App
 {
     public static $config;
 
-    /**
-     * Initing the application:
-     * Connectiong to desired DB (configure it up 'config.php')
-     */
+
     public static function init()
     {
 //        session_start();
@@ -90,11 +107,10 @@ class App
     }
 
     /**
-     * @param ArrayAccess $data
-     * @return array
      * This method allows us to work with noArray objects as with Arrays using ArrayAccess
      * It will setting response code and HTTP header.
      * Will return data in json encoding
+     *     )
      */
     public static function json(ArrayAccess $data)
     {

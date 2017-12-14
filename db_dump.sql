@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
--- Хост:                         127.0.0.1
--- Версия сервера:               10.1.22-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win32
+-- Хост:                         DCODE
+-- Версия сервера:               10.1.25-MariaDB - MariaDB Server
+-- Операционная система:         Linux
 -- HeidiSQL Версия:              9.4.0.5125
 -- --------------------------------------------------------
 
@@ -12,26 +12,27 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 
--- Дамп структуры базы данных rest-task-db
-CREATE DATABASE IF NOT EXISTS `rest-task-db` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_bin */;
-USE `rest-task-db`;
+-- Дамп структуры базы данных kalenyuk-rest-task-db
+CREATE DATABASE IF NOT EXISTS `kalenyuk-rest-task-db` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_bin */;
+USE `kalenyuk-rest-task-db`;
 
--- Дамп структуры для таблица rest-task-db.posts
-DROP TABLE IF EXISTS `posts`;
+-- Дамп структуры для таблица kalenyuk-rest-task-db.posts
 CREATE TABLE IF NOT EXISTS `posts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(200) COLLATE utf8_bin DEFAULT NULL,
   `content` text COLLATE utf8_bin,
   `author` varchar(200) COLLATE utf8_bin DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- Дамп данных таблицы rest-task-db.posts: ~0 rows (приблизительно)
+-- Дамп данных таблицы kalenyuk-rest-task-db.posts: ~2 rows (приблизительно)
+DELETE FROM `posts`;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` (`id`, `title`, `content`, `author`, `created_at`) VALUES
-	(1, 'post 1', 'con 1', 'user 1', '2017-12-02 12:59:21'),
-	(2, 'post 2', 'con 2', 'user 2', '2017-12-02 15:03:21');
+INSERT INTO `posts` (`id`, `title`, `content`, `author`, `created_at`, `updated_at`) VALUES
+	(1, 'The Solution to Hacks ', ' seems like every other day, there’s a new massive security breach announced; some major company dropped the ball, and has compromised millions of consumer records, including passwords or sensitive financial information. Equifax is the latest and most visible example of these breaches, but a Yahoo breach from years ago is still unfolding with new information, and the Target breach ended up costing hundreds of millions of dollars. Breaches are huge, damaging, and costly.', 'Anna Johansson', '2017-12-02 12:59:21', NULL),
+	(2, 'Careers in IT', 'In the November 2017 issue of ComputingEdge, we asked Thomas N. Theis—professor of electrical engineering at Columbia University and executive director of the Columbia Nano Initiative—about career opportunities in information technology. His research interests include emerging types of devices and computer architectures for energy-efficient computing. He coauthored the article “The End of Moore’s Law: A New Beginning for Information Technology” from Computing in Science & Engineering’s March/April 2017 issue.', 'Lori Cameron', '2017-12-02 15:03:21', NULL);
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
