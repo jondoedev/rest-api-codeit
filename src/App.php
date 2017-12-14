@@ -145,13 +145,12 @@ class App
         if ($validation->fails()) {
             // handling errors
             $errors = $validation->errors->firstOfAll();
-            foreach ($errors as $error) {
-                echo '<pre>' . $error . '</pre>';
+            if (isset($errors)) {[
+                  'headers' => ['Content-Type' => 'application/json'],
+              ];
+                print_r(json_encode($errors));
             }
             exit;
-        } else {
-            // validation passes
-            echo "Success!";
         }
     }
 

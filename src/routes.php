@@ -183,9 +183,9 @@ return [
         'handler' => function($request){
             $rules = [
                 'id' => 'numeric',
-                'title' => 'required|',
+                'title' => 'required|min:3',
                 'content' => 'required|min:2|',
-                'author' => 'required'];
+                'author' => 'required|min:2'];
             App::Validator($request, $rules);
             $post = Post::create($request['json']);
             return App::json($post);
@@ -235,7 +235,9 @@ return [
         'handler' => function($request, $id){
             $post = Post::findOrFail($id);
             $post->delete();
-            return "Item #{$id} Was Deleted Successfully";
+            if ($post->delete()){
+                return true;
+            }
         }
     ],
 
