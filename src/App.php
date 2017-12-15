@@ -40,6 +40,7 @@ use Rakit\Validation\Validator;
 class App
 {
     public static $config;
+    public static $errors;
 
 
     public static function init()
@@ -112,10 +113,10 @@ class App
      * Will return data in json encoding
      *     )
      */
-    public static function json(ArrayAccess $data)
+    public static function json($data, $code)
     {
         return [
-            'code' => 200,
+            'code' => $code,
             'headers' => ['Content-Type' => 'application/json'],
             'body' => json_encode($data)
         ];
@@ -143,16 +144,12 @@ class App
         $validator = new Validator;
         $validation = $validator->validate($request, $rules);
         if ($validation->fails()) {
-            // handling errors
-            $errors = $validation->errors->firstOfAll();
-            if (isset($errors)) {[
-                  'headers' => ['Content-Type' => 'application/json'],
-              ];
-                print_r(json_encode($errors));
+            self::$errors = $validation->errors->toArray();
             }
-            exit;
         }
-    }
+
+
+
 
     //TODO: Try to fix "Notice: Undefined index: PHP_AUTH_USER and PHP_AUTH_PW"
     /**

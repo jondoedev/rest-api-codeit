@@ -1,5 +1,5 @@
 <?php
-
+require_once 'App.php';
 use App\App;
 use App\Models\Post;
 use Rakit\Validation\Validator as Validator;
@@ -78,7 +78,7 @@ return [
         'method' => 'GET',
         'pattern' => '/posts',
         'handler' => function ($request) {
-            return App::json(Post::all());
+            return App::json(Post::all(),200);
         }
     ],
 
@@ -125,7 +125,7 @@ return [
         'method' => 'GET',
         'pattern' => '/posts/(\d+)',
         'handler' => function($request, $id){
-            return App::json(Post::findOrFail($id));
+            return App::json(Post::findOrFail($id),200);
         }
     ],
 
@@ -169,8 +169,8 @@ return [
      *          description="If user not authenticated"
      *     ),
      *     @SWG\Response(
-     *          response=400,
-     *          description="If post data is empty"
+     *          response=409,
+     *          description="If post data is not valid"
      *     ),
      *
      * )
@@ -187,9 +187,13 @@ return [
                 'content' => 'required|min:2|',
                 'author' => 'required|min:2'];
             App::Validator($request, $rules);
+            if (App::$errors){
+                return App::json(App::$errors,409);
+            }else{
             $post = Post::create($request['json']);
-            return App::json($post);
+            return App::json($post,200);
         }
+    }
     ],
 
     /**
@@ -326,7 +330,7 @@ return [
                 $post->created_at = $request_data['created_at'];
             }
             $post->save();
-            return App::json($post);
+            return App::json($post, 200);
         }
     ]
 ];

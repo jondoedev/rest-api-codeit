@@ -126,8 +126,8 @@
                     "401": {
                         "description": "If user not authenticated"
                     },
-                    "400": {
-                        "description": "If post data is empty"
+                    "409": {
+                        "description": "If post data is not valid"
                     }
                 }
             }
