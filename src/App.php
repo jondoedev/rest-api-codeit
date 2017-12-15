@@ -95,7 +95,7 @@ class App
                 } catch (ModelNotFoundException $e) {
                     return [
                         'code' => 404,
-                        'body' => 'not found'
+                        'body' => json_encode(['error'=> 'not found'])
                     ];
                 }
             }
@@ -137,21 +137,30 @@ class App
      * Improving validation of data, that will be transfered in request body
      * to avoid the presence of empty columns in DB
      */
-    public static function Validator($request, $rules)
+    public static function validator($request, $rules)
     {
 
         $request = $request['json'];
         $validator = new Validator;
         $validation = $validator->validate($request, $rules);
         if ($validation->fails()) {
-            self::$errors = $validation->errors->toArray();
+            $errors = $validation->errors->toArray();
+            $flat_errors = [];
+            $full_response = [];
+            foreach ($errors as $key => $value) {
+                $flat_errors[$key] = array_values($value)[0];
+                $full_response['errors'][] = ['message' => $flat_errors[$key], 'field' => $key];
             }
+            self::$errors = $full_response;
         }
+    }
+
 
 
 
 
     //TODO: Try to fix "Notice: Undefined index: PHP_AUTH_USER and PHP_AUTH_PW"
+
     /**
      * Improving Authentification by header
      */
@@ -165,7 +174,7 @@ class App
 
         /**
          * Checking login credentials
-        */
+         */
         if ($_SERVER['PHP_AUTH_USER'] !== $credentials['login'] or $_SERVER['PHP_AUTH_PW'] !== $credentials['pwd']) {
             header('HTTP/1.1  Unauthorized');
             header('WWW-Authenticate: Basic realm= "PHP REST API"');
@@ -174,6 +183,6 @@ class App
             exit  ('Invalid Login Credentials');
         }
 
-        }
+    }
 
 }

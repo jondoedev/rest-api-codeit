@@ -186,7 +186,7 @@ return [
                 'title' => 'required|min:3',
                 'content' => 'required|min:2|',
                 'author' => 'required|min:2'];
-            App::Validator($request, $rules);
+            App::validator($request, $rules);
             if (App::$errors){
                 return App::json(App::$errors,409);
             }else{
@@ -241,6 +241,9 @@ return [
             $post->delete();
             if ($post->delete()){
                 return true;
+            }
+            if (!$post){
+                return json_encode(['error'=>'id '. $id .' not found']);
             }
         }
     ],
@@ -305,7 +308,7 @@ return [
     [
         'method' => 'PUT',
         'pattern' => '/posts/edit/(\d+)',
-        'handler' => function ($request, $id){
+        'handler' => function ($request, $id) {
 
             $rules = [
                 //validation rules
@@ -313,24 +316,31 @@ return [
                 'content' => 'min:10',
                 'author' => 'min:2'
             ];
-            App::Validator($request,$rules);
+            App::validator($request, $rules);
 
             $request_data = $request['json'];
             $post = Post::find($id);
-            if(isset($request_data['title'])){
+            if (!$post){
+                return App::json(['error' => 'id '. $id .' not found'], 404);
+            }
+            if (isset($request_data['title'])) {
                 $post->title = $request_data['title'];
             }
-            if (isset($request_data['content'])){
+            if (isset($request_data['content'])) {
                 $post->content = $request_data['content'];
             }
-            if(isset($request_data['author'])){
+            if (isset($request_data['author'])) {
                 $post->author = $request_data['author'];
             }
-            if(isset($request_data['created_at'])){
+            if (isset($request_data['created_at'])) {
                 $post->created_at = $request_data['created_at'];
             }
             $post->save();
-            return App::json($post, 200);
+            if (App::$errors) {
+                return App::json(App::$errors, 409);
+            } else {
+                return App::json($post, 200);
+            }
         }
     ]
 ];
