@@ -238,12 +238,12 @@ return [
         'pattern' => "/posts/delete/(\d+)",
         'handler' => function($request, $id){
             $post = Post::findOrFail($id);
-            $post->delete();
-            if ($post->delete()){
-                return true;
-            }
+
             if (!$post){
                 return json_encode(['error'=>'id '. $id .' not found']);
+            }
+            if ($post->delete()){
+                return App::json(['success'], 200);
             }
         }
     ],
@@ -313,7 +313,7 @@ return [
             $rules = [
                 //validation rules
                 'title' => 'min:2',
-                'content' => 'min:10',
+                'content' => 'min:2',
                 'author' => 'min:2'
             ];
             App::validator($request, $rules);
@@ -337,7 +337,7 @@ return [
             }
             $post->save();
             if (App::$errors) {
-                return App::json(App::$errors, 409);
+                return App::json(App::$errors, 422);
             } else {
                 return App::json($post, 200);
             }
