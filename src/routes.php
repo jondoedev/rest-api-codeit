@@ -79,18 +79,20 @@ return [
 		'method'  => 'GET',
 		'pattern' => '/posts',
 		'handler' => function ( $request ) {
-			if ((isset( $_GET['limit']) && $_GET['limit'] > 0)){
-				$limit = $_GET['limit'];
-//				$offset = $_GET['offset'];
-				return App::json( Post::query()->limit( $limit )->get(), 200 );
+			if (( isset( $request['query']['limit']) && $request['query']['limit'] > 0)) {
+				$limit = $request['query']['limit'];
+
+				return App::json( Post::query()->limit($limit)->get(), 200);
+			} elseif ( $column = $request['query']['column'] && $option = $request['query']['option'] ) {
+				$column = $request['query']['column'];
+				$option = $request['query']['option'];
+				//TODO:: INCLUDE $limit to url
+
+				return App::json( Post::query()->orderBy( $column, $option )->get(), 200 );
 			} else {
 				$limit = 5;
 				return App::json( Post::query()->limit($limit)->get(), 200 );
 			}
-//    	    $sorted = Post::query()->orderBy('title', 'DESC')->get();
-//    	    return App::json($sorted, 200);
-//	        var_dump($request);die();
-//            return App::json(Post::query()->get(),200);
 		}
 	],
 

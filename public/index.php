@@ -13,6 +13,7 @@ $request = [
     'info' => $_SERVER,
     'params' => $_REQUEST,
     'body' => file_get_contents('php://input'),
+	'query' => $_GET,
     'json' => json_decode(file_get_contents('php://input'), true)
 ];
 $response = App\App::run($request);
