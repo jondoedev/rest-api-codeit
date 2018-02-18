@@ -1,5 +1,6 @@
 <?php
 require_once 'App.php';
+
 use App\App;
 use App\Models\Post;
 use Rakit\Validation\Validator as Validator;
@@ -38,7 +39,7 @@ return [
     [
         'method' => 'GET',
         'pattern' => '/',
-        'handler' => function($request){
+        'handler' => function ($request) {
             return App::render('main');
         }
     ],
@@ -124,8 +125,8 @@ return [
     [
         'method' => 'GET',
         'pattern' => '/posts/(\d+)',
-        'handler' => function($request, $id){
-            return App::json(Post::findOrFail($id),200);
+        'handler' => function ($request, $id) {
+            return App::json(Post::findOrFail($id), 200);
         }
     ],
 
@@ -180,20 +181,20 @@ return [
     [
         'method' => 'POST',
         'pattern' => '/posts/create',
-        'handler' => function($request){
+        'handler' => function ($request) {
             $rules = [
                 'id' => 'numeric',
                 'title' => 'required|min:3',
                 'content' => 'required|min:2|',
                 'author' => 'required|min:2'];
             App::validator($request, $rules);
-            if (App::$errors){
-                return App::json(App::$errors,409);
-            }else{
-            $post = Post::create($request['json']);
-            return App::json($post,200);
+            if (App::$errors) {
+                return App::json(App::$errors, 409);
+            } else {
+                $post = Post::create($request['json']);
+                return App::json($post, 200);
+            }
         }
-    }
     ],
 
     /**
@@ -236,13 +237,13 @@ return [
     [
         'method' => 'DELETE',
         'pattern' => "/posts/delete/(\d+)",
-        'handler' => function($request, $id){
+        'handler' => function ($request, $id) {
             $post = Post::findOrFail($id);
 
-            if (!$post){
-                return json_encode(['error'=>'id '. $id .' not found']);
+            if (!$post) {
+                return json_encode(['error' => 'id ' . $id . ' not found']);
             }
-            if ($post->delete()){
+            if ($post->delete()) {
                 return App::json(['success'], 200);
             }
         }
@@ -320,8 +321,8 @@ return [
 
             $request_data = $request['json'];
             $post = Post::find($id);
-            if (!$post){
-                return App::json(['error' => 'id '. $id .' not found'], 404);
+            if (!$post) {
+                return App::json(['error' => 'id ' . $id . ' not found'], 404);
             }
             if (isset($request_data['title'])) {
                 $post->title = $request_data['title'];
@@ -342,5 +343,14 @@ return [
                 return App::json($post, 200);
             }
         }
-    ]
+    ],
+    [
+        'method' => 'GET',
+        'pattern' => '/sort/title/desc',
+        'handler' => function ($request) {
+            $sorted = Post::all()->sortByDesc('id')->toArray();
+            $json =  json_encode($sorted);
+            return $sorted;
+        }
+    ],
 ];
