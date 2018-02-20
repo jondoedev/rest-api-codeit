@@ -203,15 +203,24 @@ return [
         'handler' => function ($request) {
             $rules = [
                 'id' => 'numeric',
-                'title' => 'required|min:3',
-                'content' => 'required|min:2|',
-                'author' => 'required|min:2'
+                'title' => 'required|min:3|regex:/^\p{Lu}/',
+                'content' => 'required|min:2|regex:/^\p{Lu}/',
+                'author' => 'required|min:2|regex:/^\p{Lu}/',
             ];
             App::validator($request, $rules);
             if (App::$errors) {
-                return App::json(App::$errors, 409);
+                return App::json(App::$errors, 422);
             } else {
-                $post = Post::create($request['json']);
+                $title = htmlspecialchars($request['json']['title']);
+                $content = htmlspecialchars($request['json']['content']);
+                $author = htmlspecialchars($request['json']['author']);
+                $data = [
+                    'title' => $title,
+                    'content' => $content,
+                    'author' => $author
+                ];
+
+                $post = Post::create($data);
 
                 return App::json($post, 200);
             }

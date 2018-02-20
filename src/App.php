@@ -142,6 +142,9 @@ class App
 
         $request = $request['json'];
         $validator = new Validator;
+        $validator->setMessages([
+            'regex' => 'The first letter of :attribute should be capitalized',
+            ]);
         $validation = $validator->validate($request, $rules);
         if ($validation->fails()) {
             $errors = $validation->errors->toArray();
