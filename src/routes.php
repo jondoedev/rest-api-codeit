@@ -34,7 +34,7 @@ return [
      * )
      *
      *
-     * @return 'main.php'
+     * @return string
      */
     [
         'method' => 'GET',
@@ -203,9 +203,9 @@ return [
         'handler' => function ($request) {
             $rules = [
                 'id' => 'numeric',
-                'title' => 'required|min:3|regex:/^\p{Lu}/',
-                'content' => 'required|min:2|regex:/^\p{Lu}/',
-                'author' => 'required|min:2|regex:/^\p{Lu}/',
+                'title' => 'required|min:3',
+                'content' => 'required|min:2',
+                'author' => 'required|min:2',
             ];
             App::validator($request, $rules);
             if (App::$errors) {
@@ -215,9 +215,9 @@ return [
                 $content = htmlspecialchars($request['json']['content']);
                 $author = htmlspecialchars($request['json']['author']);
                 $data = [
-                    'title' => $title,
-                    'content' => $content,
-                    'author' => $author
+                    'title' => App::mb_ucfirst($title),
+                    'content' => App::mb_ucfirst($content),
+                    'author' => App::mb_ucfirst($author)
                 ];
 
                 $post = Post::create($data);

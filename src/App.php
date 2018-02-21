@@ -66,6 +66,14 @@ class App
         return self::$config['base_url'] . $relative_url;
     }
 
+
+    // analog of ucfirst (), but works well with cyrillic symbols
+    public static function mb_ucfirst($text) {
+        mb_internal_encoding("UTF-8");
+        $capitalized = mb_strtoupper(mb_substr($text, 0, 1)) . mb_substr($text, 1);
+        return $capitalized;
+    }
+
     public static function run($request)
     {
         $routes = require_once __DIR__ . '/routes.php';
@@ -142,9 +150,6 @@ class App
 
         $request = $request['json'];
         $validator = new Validator;
-        $validator->setMessages([
-            'regex' => 'The first letter of :attribute should be capitalized',
-            ]);
         $validation = $validator->validate($request, $rules);
         if ($validation->fails()) {
             $errors = $validation->errors->toArray();
