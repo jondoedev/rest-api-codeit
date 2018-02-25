@@ -32,6 +32,7 @@
 namespace App;
 
 use App\Models\User;
+use App\Models\Post;
 use ArrayAccess;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

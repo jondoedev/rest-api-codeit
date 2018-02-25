@@ -44,6 +44,14 @@ return [
         }
     ],
 
+    [
+        'method' => 'GET',
+        'pattern' => '/total',
+        'handler' => function ($request) {
+            return App::json(["total" => Post::count()], 200);
+        }
+    ],
+
     /**
      * @SWG\Get(
      *     path="/posts",
@@ -79,19 +87,36 @@ return [
         'method' => 'GET',
         'pattern' => '/posts',
         'handler' => function ($request) {
-                //case with sorting and limit
+            //case with sorting and limit
+            $total = Post::count();
             if (isset($request['query']['column']) &&
                 isset($request['query']['option']) &&
-                isset($request['query']['limit'])) {
+                isset($request['query']['offset'])) {
                 $column = $request['query']['column'];
                 $option = $request['query']['option'];
-                $limit = (int)$request['query']['limit'];
-                return App::json(Post::query()->orderBy($column, $option)->take($limit)->get(), 200);
-
+                $offset = (int)$request['query']['offset'];
+                if ($offset >= $total) {
+                    return App::json('', 422);
+                } else {
+                    return App::json([
+                        "response" => Post::query()->skip($offset)->orderBy($column, $option)->take(10)->get(),
+                        "total" => $total
+                        ], 200);
+                }
                 //case with limit without sorting
-            } elseif ((isset($request['query']['limit']) && $request['query']['limit'] > 0)) {
-                $limit = $request['query']['limit'];
-                return App::json(Post::query()->limit($limit)->get(), 200);
+            } elseif ((isset($request['query']['offset']))) {
+//                $limit = $request['query']['limit'];
+                $offset = $request['query']['offset'];
+
+
+                if ($offset >= $total) {
+                    return App::json('', 422);
+                } else {
+                    return App::json([
+                        "response" => Post::query()->skip($offset)->limit(10)->get(),
+                        "total" => $total
+                    ], 200);
+                }
 
                 //default case
             } else {
